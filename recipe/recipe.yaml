@@ -12,12 +12,19 @@ source:
 build:
   number: 0
   script:
-    - |
-      go-licenses save ./cmd/circleci --save_path library_licenses \
-      --ignore github.com/inconshreveable/go-update \
-      --ignore github.com/mattn/go-localereader \
-      --ignore github.com/alecthomas/chroma/v2 \
-      --ignore github.com/segmentio/asm
+    - if: unix
+      then: |
+        go-licenses save ./cmd/circleci --save_path library_licenses \
+        --ignore github.com/inconshreveable/go-update \
+        --ignore github.com/mattn/go-localereader \
+        --ignore github.com/alecthomas/chroma/v2 \
+        --ignore github.com/segmentio/asm
+      else:
+        go-licenses save .\cmd\circleci --save_path library_licenses \
+        --ignore github.com\inconshreveable\go-update \
+        --ignore github.com\mattn\go-localereader \
+        --ignore github.com\alecthomas\chroma\v2 \
+        --ignore github.com\segmentio\asm
     # Manually copy licenses that go-licenses could not download
     - if: unix
       then:
