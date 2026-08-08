@@ -32,7 +32,7 @@ build:
         - go build -v -o $PREFIX/bin/circleci -ldflags="-s -w" ./cmd/circleci
       else:
         - xcopy /s %RECIPE_DIR%\library_licenses\* %SRC_DIR%\library_licenses
-        - go build -v -o %LIBRARY_BIN%\circleci.exe -ldflags="-s" ./cmd/circleci
+        - go build -v -o %LIBRARY_BIN%\circleci.exe -ldflags="-s" .\cmd\circleci
 requirements:
   build:
     - ${{ compiler('go-nocgo') }}
