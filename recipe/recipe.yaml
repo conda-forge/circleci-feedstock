@@ -36,8 +36,11 @@ requirements:
 
 tests:
   - script:
-      - circleci version
-      - circleci help
+      env:
+        CIRCLE_NO_TELEMETRY: "1"
+      content:
+        - circleci version
+        - circleci help
 
 about:
   homepage: https://circleci-public.github.io/circleci-cli/
