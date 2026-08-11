@@ -1,5 +1,5 @@
 context:
-  version: "0.1.38646"
+  version: "1.0.47091"
 
 package:
   name: circleci
@@ -7,20 +7,28 @@ package:
 
 source:
   url: https://github.com/CircleCI-Public/circleci-cli/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: 9fa949b5e33fe175e9919a4cae674eea7997465a997f612c383b7a846c9f28f5
+  sha256: 5166932669edd5eec4fb4ee61974b6e0c9f2ee60178a5137b03fb3c13fe22e3f
 
 build:
   number: 0
   script:
-    - go-licenses save . --save_path library_licenses --ignore github.com/inconshreveable/go-update --ignore github.com/mattn/go-localereader
+    - if: unix
+      then: |
+        go-licenses save ./cmd/circleci --save_path library_licenses \
+        --ignore github.com/alecthomas/chroma/v2 \
+        --ignore github.com/segmentio/asm
+      else:
+        go-licenses save .\cmd\circleci --save_path library_licenses ^
+        --ignore github.com/alecthomas/chroma/v2 ^
+        --ignore github.com/segmentio/asm
     # Manually copy licenses that go-licenses could not download
     - if: unix
       then:
         - cp -r ${RECIPE_DIR}/library_licenses/* ${SRC_DIR}/library_licenses
-        - go build -v -o $PREFIX/bin/circleci -ldflags="-s -w"
+        - go build -v -o $PREFIX/bin/circleci -ldflags="-s -w" ./cmd/circleci
       else:
         - xcopy /s %RECIPE_DIR%\library_licenses\* %SRC_DIR%\library_licenses
-        - go build -v -o %LIBRARY_BIN%\circleci.exe -ldflags="-s"
+        - go build -v -o %LIBRARY_BIN%\circleci.exe -ldflags="-s" .\cmd\circleci
 requirements:
   build:
     - ${{ compiler('go-nocgo') }}
@@ -28,8 +36,11 @@ requirements:
 
 tests:
   - script:
-      - circleci version
-      - circleci help
+      env:
+        CIRCLE_NO_TELEMETRY: "1"
+      content:
+        - circleci version
+        - circleci help
 
 about:
   homepage: https://circleci-public.github.io/circleci-cli/
