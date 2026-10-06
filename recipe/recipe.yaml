@@ -1,5 +1,5 @@
 context:
-  version: "1.1.0"
+  version: "1.2.0"
 
 package:
   name: circleci
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/CircleCI-Public/circleci-cli/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: ac40bf24ffa682013fe6b4f0e6d4ce11610aeae536aae51d51f721396c61611c
+  sha256: ead081a270c38d97a847b8f01a1536b624767456f7d7a8c7376c5e13c9e0efa4
 
 build:
   number: 0
